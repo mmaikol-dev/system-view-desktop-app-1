@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 320" width="1024" height="320" role="img" aria-label="PCMind logo">
+  <defs>
+    <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34D399"/>
+      <stop offset="100%" stop-color="#22D3EE"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#34D399" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#22D3EE" stop-opacity="0.9"/>
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background (transparent by default; uncomment for preview) -->
+  <!-- <rect width="1024" height="320" fill="#0B0F14"/> -->
+
+  <!-- Icon -->
+  <g transform="translate(64,48)">
+    <rect x="0" y="0" width="224" height="224" rx="52" fill="#0F1722" stroke="url(#g1)" stroke-width="4"/>
+    <rect x="14" y="14" width="196" height="196" rx="42" fill="none" stroke="#1E293B" stroke-width="2"/>
+
+    <!-- Circuit brain nodes -->
+    <g stroke="url(#g2)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.95">
+      <path d="M112 42 L112 68 M112 156 L112 182 M42 112 L68 112 M156 112 L182 112"/>
+      <path d="M64 64 L82 82 M160 64 L142 82 M64 160 L82 142 M160 160 L142 142"/>
+      <circle cx="112" cy="112" r="34"/>
+      <circle cx="112" cy="42" r="6" fill="#34D399" stroke="none"/>
+      <circle cx="112" cy="182" r="6" fill="#22D3EE" stroke="none"/>
+      <circle cx="42" cy="112" r="6" fill="#34D399" stroke="none"/>
+      <circle cx="182" cy="112" r="6" fill="#22D3EE" stroke="none"/>
+      <circle cx="64" cy="64" r="5" fill="#34D399" stroke="none"/>
+      <circle cx="160" cy="64" r="5" fill="#22D3EE" stroke="none"/>
+      <circle cx="64" cy="160" r="5" fill="#34D399" stroke="none"/>
+      <circle cx="160" cy="160" r="5" fill="#22D3EE" stroke="none"/>
+    </g>
+
+    <!-- Pulse waveform -->
+    <path d="M44 122 L78 122 L90 122 L100 96 L114 136 L126 108 L136 122 L180 122" fill="none" stroke="url(#g1)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
+    <circle cx="112" cy="112" r="3.5" fill="#E6FFFA"/>
+  </g>
+
+  <!-- Wordmark -->
+  <g fill="#F8FAFC" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif">
+    <text x="332" y="165" font-size="92" font-weight="700" letter-spacing="-1">PC</text>
+    <text x="452" y="165" font-size="92" font-weight="500" letter-spacing="-1" fill="#DCE7F3">Mind</text>
+    <text x="334" y="202" font-size="24" font-weight="500" letter-spacing="2" fill="#7DD3FC" opacity="0.85">SYSTEM MONITOR</text>
+  </g>
+</svg>

@@ -2,11 +2,19 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import type { CpuUsage, DiskUsage, MemoryUsage, SystemInfo, SystemStats } from "../types/system";
 
+export interface StatsHistory {
+  cpu: number[];
+  memory: number[];
+  timestamps: number[];
+}
+
 interface UseSystemStatsResult {
   stats: SystemStats;
+  history: StatsHistory;
   loading: boolean;
   error: string | null;
   refresh: () => Promise<void>;
+  lastUpdated: number | null;
 }
 
 const INITIAL_STATS: SystemStats = {
@@ -15,6 +23,8 @@ const INITIAL_STATS: SystemStats = {
   memory: null,
   disks: [],
 };
+
+const MAX_POINTS = 40;
 
 function toErrorMessage(err: unknown): string {
   if (err instanceof Error) return err.message;
@@ -26,10 +36,18 @@ function toErrorMessage(err: unknown): string {
   }
 }
 
+function pushLimited(arr: number[], value: number, max: number): number[] {
+  const next = arr.length >= max ? arr.slice(arr.length - max + 1) : arr.slice();
+  next.push(value);
+  return next;
+}
+
 export function useSystemStats(pollMs = 2000): UseSystemStatsResult {
   const [stats, setStats] = useState<SystemStats>(INITIAL_STATS);
+  const [history, setHistory] = useState<StatsHistory>({ cpu: [], memory: [], timestamps: [] });
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [lastUpdated, setLastUpdated] = useState<number | null>(null);
   const mountedRef = useRef(true);
   const inFlightRef = useRef(false);
 
@@ -45,7 +63,14 @@ export function useSystemStats(pollMs = 2000): UseSystemStatsResult {
       ]);
 
       if (!mountedRef.current) return;
+      const now = Date.now();
       setStats({ systemInfo, cpu, memory, disks });
+      setHistory((prev) => ({
+        cpu: pushLimited(prev.cpu, cpu.overall, MAX_POINTS),
+        memory: pushLimited(prev.memory, memory.usagePercent, MAX_POINTS),
+        timestamps: pushLimited(prev.timestamps, now, MAX_POINTS),
+      }));
+      setLastUpdated(now);
       setError(null);
     } catch (err) {
       if (!mountedRef.current) return;
@@ -69,5 +94,5 @@ export function useSystemStats(pollMs = 2000): UseSystemStatsResult {
     };
   }, [pollMs, refresh]);
 
-  return { stats, loading, error, refresh };
+  return { stats, history, loading, error, refresh, lastUpdated };
 }
